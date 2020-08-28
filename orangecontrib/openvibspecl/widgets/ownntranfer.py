@@ -1,9 +1,11 @@
 from Orange.data import Table
 from Orange.widgets.utils.owlearnerwidget import OWBaseLearner
 from Orange.widgets.utils.widgetpreview import WidgetPreview
-from Orange.classification.logistic_regression import LogisticRegressionLearner
 
-from Orange.widgets.utils.signals import Output
+from openvibspec.models import CellularComponentsClassification
+
+from orangecontrib.openvibspecl.nntransfer import NNTransferLearner
+
 
 class OWNNTranfer(OWBaseLearner):
     name = 'Neural Network Transfer'
@@ -11,10 +13,7 @@ class OWNNTranfer(OWBaseLearner):
     icon = "icons/unknown.svg"
     keywords = ["neural", "network", "nn", "transfer"]
 
-    LEARNER = LogisticRegressionLearner
-
-    class Outputs(OWBaseLearner.Outputs):
-        coefficients = Output("Coefficients", Table, explicit=True)
+    LEARNER = NNTransferLearner
 
     def add_main_layout(self):
         pass
@@ -28,7 +27,8 @@ class OWNNTranfer(OWBaseLearner):
 
     def create_learner(self):
         common_args = {'preprocessors': self.preprocessors}
-        return self.LEARNER(**common_args)
+        return self.LEARNER(original_model=CellularComponentsClassification(),
+                            **common_args)
 
 
 if __name__ == "__main__":  # pragma: no cover
